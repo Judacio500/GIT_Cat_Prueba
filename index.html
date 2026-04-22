@@ -2,94 +2,185 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>El Gato del Multiverso Git</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gato Multiverso 2.0</title>
     <style>
-        body { display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f0f0f0; font-family: sans-serif; }
-        .escena { text-align: center; }
-        
-        /* === EL GATO (Cuerpo y Colores Base) === */
-        .gato {
-            position: relative;
-            width: 200px;
-            height: 180px;
-            /* CAMBIA ESTE COLOR PARA CREAR UNA VARIANTE */
-            background-color: #95a5a6; /* Gris Base */
-            border-radius: 100px 100px 60px 60px;
-            margin-top: 50px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-            transition: background-color 0.3s ease;
+        /* =========================================
+           CSS GLOBAL (ESTILO DE LA ESCENA)
+           ========================================= */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            /* 1. CAMBIO INOCENTE: Color de Fondo */
+            background-color: #e0f7fa; /* Celeste claro */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: background-color 0.5s ease;
         }
 
-        /* Orejas */
-        .oreja {
+        .contenedor {
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        p.version {
+            color: #777;
+            font-size: 1.1em;
+            margin-top: 0;
+            margin-bottom: 30px;
+        }
+
+        /* =========================================
+           EL GATO (ESTRUCTURA Y COLORES)
+           ========================================= */
+        
+        /* 2. EL CONFLICTO MAESTRO: Color del Cuerpo y Orejas */
+        :root {
+            --color-gato: #b0bec5;      /* Gris Base */
+            --color-orejas: #b0bec5;    /* Mismo que el cuerpo */
+            --color-nariz: #ff8a80;     /* Rosa suave */
+            --color-ojos: #263238;      /* Oscuro */
+            --color-pupilas: #ffffff;   /* Blanco */
+        }
+
+        .gato-completo {
+            position: relative;
+            display: inline-block;
+        }
+
+        /* CUERPO PRINCIPAL */
+        .cuerpo {
+            position: relative;
+            width: 180px;
+            height: 200px;
+            background-color: var(--color-gato);
+            border-radius: 90px 90px 40px 40px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            z-index: 1;
+        }
+
+        /* OREJAS (Dibujadas con bordes) */
+        .cuerpo::before, .cuerpo::after {
+            content: '';
             position: absolute;
-            top: -30px;
+            top: -20px;
             width: 0;
             height: 0;
-            border-left: 35px solid transparent;
-            border-right: 35px solid transparent;
-            /* ESTE COLOR DEBE COINCIDIR CON EL CUERPO */
-            border-bottom: 60px solid #95a5a6; /* Gris Base */
+            border-left: 30px solid transparent;
+            border-right: 30px solid transparent;
+            border-bottom: 50px solid var(--color-orejas);
+            z-index: -1;
         }
-        .oreja.izquierda { left: 20px; transform: rotate(-15deg); }
-        .oreja.derecha { right: 20px; transform: rotate(15deg); }
+        .cuerpo::before { left: 15px; transform: rotate(-10deg); }
+        .cuerpo::after { right: 15px; transform: rotate(10deg); }
 
-        /* Ojos */
-        .ojo {
+        /* CARA (Contenedor invisible para ojos y nariz) */
+        .cara {
             position: absolute;
             top: 60px;
-            width: 30px;
-            height: 30px;
-            background-color: white;
-            border-radius: 50%;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            z-index: 2;
         }
-        .ojo::after {
+
+        /* OJOS */
+        .cara::before, .cara::after {
             content: '';
             position: absolute;
-            top: 5px; left: 10px;
-            width: 10px; height: 20px;
-            background-color: #2c3e50; /* Pupila */
+            width: 25px;
+            height: 25px;
+            background-color: var(--color-ojos);
             border-radius: 50%;
         }
-        .ojo.izquierda { left: 45px; }
-        .ojo.derecha { right: 45px; }
+        .cara::before { left: 45px; } /* Ojo izquierdo */
+        .cara::after { right: 45px; } /* Ojo derecho */
 
-        /* Nariz y Bigotes */
+        /* PUPILAS (Brillo de los ojos) */
+        /* 3. CAMBIO INTERMEDIO: Color de las Pupilas/Brillo */
+        .cara::before {
+            background-image: radial-gradient(circle at 35% 35%, var(--color-pupilas) 20%, var(--color-ojos) 21%);
+        }
+        .cara::after {
+            background-image: radial-gradient(circle at 35% 35%, var(--color-pupilas) 20%, var(--color-ojos) 21%);
+        }
+
+        /* NARIZ */
+        /* 4. CAMBIO INTERMEDIO: Color de la Nariz */
         .nariz {
             position: absolute;
-            top: 100px; left: 92px;
-            width: 16px; height: 10px;
-            background-color: #e74c3c; /* Rosa */
+            top: 35px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 18px;
+            height: 12px;
+            background-color: var(--color-nariz);
             border-radius: 50%;
         }
-        .bigotes {
-            position: absolute;
-            top: 110px; left: 50px;
-            width: 100px; height: 40px;
-            background-color: transparent;
-        }
-        .bigotes::before, .bigotes::after {
+
+        /* BIGOTES (Usando box-shadow para líneas múltiples) */
+        .nariz::before, .nariz::after {
             content: '';
             position: absolute;
-            width: 60px; height: 2px;
-            background-color: #34495e;
+            top: 10px;
+            width: 50px;
+            height: 2px;
+            background-color: #546e7a; /* Color bigotes */
         }
-        .bigotes::before { top: 10px; left: -10px; transform: rotate(5deg); box-shadow: 0 10px 0 #34495e; }
-        .bigotes::after { top: 10px; right: -10px; transform: rotate(-5deg); box-shadow: 0 10px 0 #34495e; }
+        .nariz::before {
+            right: 15px;
+            transform: rotate(5deg);
+            box-shadow: 0 8px 0 #546e7a;
+        }
+        .nariz::after {
+            left: 15px;
+            transform: rotate(-5deg);
+            box-shadow: 0 8px 0 #546e7a;
+        }
+
+        /* PATITAS */
+        .patitas {
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 30px;
+            z-index: 2;
+        }
+        .patitas::before, .patitas::after {
+            content: '';
+            position: absolute;
+            width: 40px;
+            height: 30px;
+            background-color: var(--color-gato);
+            border-radius: 20px;
+            box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+        }
+        .patitas::before { left: 0; }
+        .patitas::after { right: 0; }
 
     </style>
 </head>
 <body>
-    <div class="escena">
-        <h1>MIAU!!!!</h1>
-        <div class="gato">
-            <div class="oreja izquierda"></div>
-            <div class="oreja derecha"></div>
-            <div class="ojo izquierda"></div>
-            <div class="ojo derecha"></div>
-            <div class="nariz"></div>
-            <div class="bigotes"></div>
+    <div class="contenedor">
+        <h1>El Gato del Multiverso</h1>
+        <p class="version">Línea Sagrada (Base)</p>
+        
+        <div class="gato-completo">
+            <div class="cuerpo">
+                <div class="cara">
+                    <div class="nariz"></div>
+                </div>
+            </div>
+            <div class="patitas"></div>
         </div>
-    </div>
+        </div>
 </body>
 </html>
